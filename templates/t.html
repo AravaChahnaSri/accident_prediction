@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accident Severity Prediction</title>
+
+  <!-- Google Material Icons & Materialize CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #004d40, #0f2027);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+      margin-top: 50px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    label { color: #b2dfdb !important; }
+    input, select { color: white; }
+    .btn {
+      background-color: #00bfa5 !important;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+    }
+    .btn:hover {
+      background-color: #1de9b6 !important;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 255, 200, 0.4);
+    }
+    nav ul li a {
+      transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+    nav ul li a:hover {
+      background-color: #00796b;
+      transform: scale(1.05);
+      border-radius: 5px;
+    }
+    .result-card {
+      margin-top: 25px;
+      padding: 20px;
+      font-size: 20px;
+      border-radius: 15px;
+      animation: fadeIn 0.8s ease-in-out;
+      font-weight: 600;
+      text-align: center;
+    }
+    .minor {
+      background-color: rgba(0, 255, 0, 0.1);
+      color: #00e676;
+      border: 2px solid #00e676;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+    }
+    .major {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #ff5252;
+      border: 2px solid #ff5252;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar-fixed">
+    <nav class="green darken-3">
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo">&nbsp;&nbsp;Accident Severity Prediction</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/Map"><i class="material-icons left">map</i>Maps</a></li>
+          <li><a href="/Graphs"><i class="material-icons left">bar_chart</i>Graphs</a></li>
+          <li><a href="/Pie"><i class="material-icons left">pie_chart</i>Pie Charts</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Form -->
+  <div class="container">
+    <h4 class="center green-text text-lighten-2">🚗 Predict Accident Severity</h4>
+    <p class="center grey-text text-lighten-1">Enter the encoded details below (as per dataset)</p>
+
+    <form action="/predict" method="post">
+      <div class="row">
+        <div class="input-field col s4">
+          <select name="Sex_Of_Driver" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Female</option>
+            <option value="1">1 - Male</option>
+          </select>
+          <label>Sex of Driver</label>
+        </div>
+
+        <div class="input-field col s4">
+          <select name="Vehicle_Type" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Small Vehicle</option>
+            <option value="1">1 - Heavy Vehicle</option>
+          </select>
+          <label>Vehicle Type</label>
+        </div>
+
+        <div class="input-field col s4">
+          <input name="Speed_limit" type="number" min="10" max="200" required>
+          <label>Speed Limit (km/h)</label>
+        </div>
+
+        <div class="input-field col s4">
+          <select name="Road_Type" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Muddy Road</option>
+            <option value="1">1 - Dry Road</option>
+            <option value="2">2 - Wet Road</option>
+          </select>
+          <label>Road Surface Type</label>
+        </div>
+
+        <div class="input-field col s4">
+          <input name="Number_of_Pasengers" type="number" min="0" max="10" required>
+          <label>Number of Passengers</label>
+        </div>
+
+        <div class="input-field col s4">
+          <select name="Day_of_Week" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Sunday</option>
+            <option value="1">1 - Monday</option>
+            <option value="2">2 - Tuesday</option>
+            <option value="3">3 - Wednesday</option>
+            <option value="4">4 - Thursday</option>
+            <option value="5">5 - Friday</option>
+            <option value="6">6 - Saturday</option>
+          </select>
+          <label>Day of the Week</label>
+        </div>
+
+        <div class="input-field col s4">
+          <select name="Light_Conditions" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Day</option>
+            <option value="1">1 - Night</option>
+          </select>
+          <label>Light Conditions</label>
+        </div>
+
+        <div class="input-field col s4">
+          <select name="Weather" required>
+            <option value="" disabled selected>Select</option>
+            <option value="0">0 - Clear</option>
+            <option value="1">1 - Rainy</option>
+            <option value="2">2 - Stormy</option>
+            <option value="3">3 - Foggy</option>
+          </select>
+          <label>Weather Condition</label>
+        </div>
+      </div>
+
+      <div class="row center">
+        <button type="submit" class="btn-large waves-effect waves-light">
+          <i class="material-icons right">analytics</i>Predict Severity
+        </button>
+      </div>
+    </form>
+
+    {% if pred %}
+      <div class="result-card {% if 'Minor' in pred %}minor{% else %}major{% endif %}">
+        {{ pred|safe }}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer green darken-3 center">
+    <div class="container">
+      © 2024 Accident Severity Prediction | Built with Flask & Materialize
+    </div>
+  </footer>
+
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+    });
+  </script>
+</body>
+</html>
